@@ -18,6 +18,8 @@ public class AppScreen {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
+        String iconPath = "lock_box_icon.png";
+        frame.setIconImage(new ImageIcon(iconPath).getImage());
 
         siteListModel = new DefaultListModel<>();
         siteList = new JList<>(siteListModel);
@@ -69,8 +71,26 @@ public class AppScreen {
         rightPanel.add(saveButton);
 
         siteList.addListSelectionListener(e -> updateRightPanel());
-        editButton.addActionListener(e -> enableEditing());
-        saveButton.addActionListener(e -> saveChanges());
+
+        editButton.addActionListener(e -> {
+            editButton.setEnabled(false);
+            saveButton.setEnabled(true);
+            disableFields();
+        });
+
+        saveButton.addActionListener(e -> {
+            int selectedIndex = siteList.getSelectedIndex();
+            if (selectedIndex >= 0 && selectedIndex < passwordStorageList.size()) {
+                PasswordStroge selectedStorage = passwordStorageList.get(selectedIndex);
+                selectedStorage.setSiteName(siteNameField.getText());
+                selectedStorage.setUsername(siteUsernameField.getText());
+                selectedStorage.setPassword(new String(sitePasswordField.getPassword()));
+                editButton.setEnabled(true);
+                saveButton.setEnabled(false);
+                enableFields();
+                JOptionPane.showMessageDialog(frame, "Changes saved successfully.");
+            }
+        });
 
         frame.add(leftPanel, BorderLayout.WEST);
         frame.add(rightPanel, BorderLayout.CENTER);
@@ -98,38 +118,30 @@ public class AppScreen {
             siteNameField.setText(selectedStorage.getSiteName());
             siteUsernameField.setText(selectedStorage.getUsername());
             sitePasswordField.setText(selectedStorage.getPassword());
-            enableEditing();
+            if (editButton.isEnabled()) {
+                disableFields();
+            } else {
+                enableFields();
+            }
         }
     }
 
-    private void enableEditing() {
-        editButton.setEnabled(true);
-        saveButton.setEnabled(false);
+    private void disableFields() {
         siteNameField.setEditable(false);
         siteUsernameField.setEditable(false);
         sitePasswordField.setEditable(false);
     }
 
-    private void saveChanges() {
-        int selectedIndex = siteList.getSelectedIndex();
-        if (selectedIndex >= 0 && selectedIndex < passwordStorageList.size()) {
-            PasswordStroge selectedStorage = passwordStorageList.get(selectedIndex);
-            selectedStorage.setSiteName(siteNameField.getText());
-            selectedStorage.setUsername(siteUsernameField.getText());
-            selectedStorage.setPassword(new String(sitePasswordField.getPassword()));
-            enableEditing();
-            JOptionPane.showMessageDialog(frame, "Changes saved successfully.");
-        }
+    private void enableFields() {
+        siteNameField.setEditable(true);
+        siteUsernameField.setEditable(true);
+        sitePasswordField.setEditable(true);
     }
 
     public void open() {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            AppScreen appScreen = new AppScreen();
-            appScreen.open();
-        });
-    }
+
+
 }
