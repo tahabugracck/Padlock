@@ -79,14 +79,14 @@ class PasswordStrength {
     }
 
     public Color calculateStrengthColor(int strength) {
-        Color color = null;
+        Color color;
         if (strength <= 20) {
             color = Color.red;
-        } else if (strength > 20 && strength <= 40) {
+        } else if (strength <= 40) {
             color = Color.orange;
-        } else if (strength > 40 && strength <= 60) {
+        } else if (strength <= 60) {
             color = Color.yellow;
-        } else if (strength > 60) {
+        } else {
             color = Color.green;
         }
         return color;
