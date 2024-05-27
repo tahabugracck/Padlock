@@ -1,14 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 class CharacterPool {
-    private List<Character> characters;
+    private final List<Character> characters;
 
     public CharacterPool() {
         characters = new ArrayList<>();
@@ -54,7 +52,7 @@ class CharacterPool {
 }
 
 class PasswordStrength {
-    private String password;
+    private final String password;
 
     public PasswordStrength(String password) {
         this.password = password;
@@ -86,7 +84,6 @@ public class PasswordGenerator {
     private JCheckBox upperCaseCheckBox, lowerCaseCheckBox, numbersCheckBox, symbolsCheckBox;
     private JTextField lengthField, passwordField;
     private JProgressBar strengthBar;
-    private CharacterPool characterPool;
 
     public PasswordGenerator() {
         try {
@@ -98,7 +95,7 @@ public class PasswordGenerator {
             String iconPath = "lock_box_icon.png";
             frame.setIconImage(new ImageIcon(iconPath).getImage());
 
-            JPanel panel = new JPanel(new GridLayout(7, 1));
+            JPanel panel = new JPanel(new GridLayout(8, 1));
 
             upperCaseCheckBox = new JCheckBox("Include Uppercase Letters");
             lowerCaseCheckBox = new JCheckBox("Include Lowercase Letters");
@@ -112,11 +109,8 @@ public class PasswordGenerator {
             strengthBar.setBorder(BorderFactory.createTitledBorder("Password Strength"));
 
             JButton generateButton = new JButton("Generate Password");
-            generateButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    generatePassword(); // Parola oluşturma fonksiyonunu çağırır
-                }
+            generateButton.addActionListener(e -> {
+                generatePassword(); // Parola oluşturma fonksiyonunu çağırır
             });
 
             panel.add(upperCaseCheckBox);
@@ -137,28 +131,34 @@ public class PasswordGenerator {
     }
 
     public void generatePassword() {
+        CharacterPool characterPool = new CharacterPool();
+        if (upperCaseCheckBox.isSelected()) {
+            characterPool.addUpperCase(); // Büyük harfleri ekler
+        }
+        if (lowerCaseCheckBox.isSelected()) {
+            characterPool.addLowerCase(); // Küçük harfleri ekler
+        }
+        if (numbersCheckBox.isSelected()) {
+            characterPool.addNumbers(); // Rakamları ekler
+        }
+        if (symbolsCheckBox.isSelected()) {
+            characterPool.addSymbols(); // Sembolleri ekler
+        }
+        String password;
         try {
-            characterPool = new CharacterPool();
-            if (upperCaseCheckBox.isSelected()) {
-                characterPool.addUpperCase(); // Büyük harfleri ekler
+            if (Integer.parseInt(lengthField.getText()) >= 4) {
+                password = characterPool.generatePassword(Integer.parseInt(lengthField.getText()));
+                passwordField.setText(password);
+                PasswordStrength passwordStrength = new PasswordStrength(password);
+                int strength = passwordStrength.calculateStrength(); // Parola gücünü hesaplar
+                strengthBar.setValue(strength); // Parola gücünü gösterir
+                strengthBar.setForeground(passwordStrength.calculateStrengthColor(strength));
+            } else {
+                JOptionPane.showMessageDialog(frame, "Please enter a value greater than 4!");
             }
-            if (lowerCaseCheckBox.isSelected()) {
-                characterPool.addLowerCase(); // Küçük harfleri ekler
-            }
-            if (numbersCheckBox.isSelected()) {
-                characterPool.addNumbers(); // Rakamları ekler
-            }
-            if (symbolsCheckBox.isSelected()) {
-                characterPool.addSymbols(); // Sembolleri ekler
-            }
-
-            String password = characterPool.generatePassword(Integer.parseInt(lengthField.getText())); // Parolayı oluşturur
-            passwordField.setText(password);
-            PasswordStrength passwordStrength = new PasswordStrength(password);
-            int strength = passwordStrength.calculateStrength(); // Parola gücünü hesaplar
-            strengthBar.setValue(strength); // Parola gücünü gösterir
         } catch (Exception e) {
-            e.printStackTrace(); // Hata durumunda hata mesajını yazdırır
+            JOptionPane.showMessageDialog(frame, "Please Enter a Valid Value!");
+            lengthField.setText("");
         }
     }
 }
