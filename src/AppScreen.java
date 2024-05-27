@@ -130,6 +130,7 @@ public class AppScreen {
                         saveButton.setEnabled(false);
                         JOptionPane.showMessageDialog(frame, "Changes saved successfully.");
                         disableFields();
+                        updateRightPanel();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
