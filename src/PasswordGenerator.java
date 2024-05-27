@@ -20,6 +20,8 @@ public class PasswordGenerator implements PasswordGeneratorInterface {
         frame = new JFrame("Password Generator");
         frame.setSize(400, 400);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        String iconPath = "lock_box_icon.png";
+        frame.setIconImage(new ImageIcon(iconPath).getImage());
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());
 
@@ -221,11 +223,12 @@ public class PasswordGenerator implements PasswordGeneratorInterface {
 }
 
 
-
-
 interface PasswordGeneratorInterface {
     String generatePassword(int length);
+
     void checkPassword();
+
     void printMenu();
+
     void printQuitMessage();
 }

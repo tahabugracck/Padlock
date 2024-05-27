@@ -33,7 +33,6 @@ public class LoginScreen {
                 String username = userName.getText();
                 String pass = new String(password.getPassword());
                 if (username.equals("bugra") && pass.equals("5252")) {
-                    JOptionPane.showMessageDialog(frame, "Login Successful");
                     AppScreen appScreen = new AppScreen();
                     appScreen.open();
                     frame.dispose();
