@@ -77,6 +77,20 @@ class PasswordStrength {
         }
         return strength;
     }
+
+    public Color calculateStrengthColor(int strength) {
+        Color color = null;
+        if (strength <= 20) {
+            color = Color.red;
+        } else if (strength > 20 && strength <= 40) {
+            color = Color.orange;
+        } else if (strength > 40 && strength <= 60) {
+            color = Color.yellow;
+        } else if (strength > 60) {
+            color = Color.green;
+        }
+        return color;
+    }
 }
 
 public class PasswordGenerator {
@@ -102,6 +116,7 @@ public class PasswordGenerator {
             numbersCheckBox = new JCheckBox("Include Numbers");
             symbolsCheckBox = new JCheckBox("Include Symbols");
             lengthField = new JTextField();
+            lengthField.setBorder(BorderFactory.createTitledBorder("Enter Your Password Length"));
             passwordField = new JTextField();
             passwordField.setEditable(false);
             passwordField.setBorder(BorderFactory.createTitledBorder("Generated Password"));
@@ -160,5 +175,16 @@ public class PasswordGenerator {
             JOptionPane.showMessageDialog(frame, "Please Enter a Valid Value!");
             lengthField.setText("");
         }
+    }
+}
+class AutoPassGenerator {
+    public String getAutoPassGenerator() {
+        CharacterPool characterPool = new CharacterPool();
+        Random random = new Random();
+        characterPool.addSymbols();
+        characterPool.addUpperCase();
+        characterPool.addLowerCase();
+        characterPool.addNumbers();
+        return characterPool.generatePassword(random.nextInt(8, 20));
     }
 }
