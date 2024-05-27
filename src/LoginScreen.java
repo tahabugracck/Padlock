@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class LoginScreen {
     private JFrame frame;
@@ -29,37 +27,31 @@ public class LoginScreen {
             JButton registerButton = new JButton("Register");
 
             // Giriş butonuna tıklama işlemi
-            loginButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        String username = userName.getText();
-                        String pass = new String(password.getPassword());
-                        if (username.equals("bugra") && pass.equals("5252")) {
-                            AppScreen appScreen = new AppScreen();
-                            appScreen.open();
-                            frame.dispose(); // Giriş başarılıysa ana ekranı açar ve giriş ekranını kapatır
-                        } else {
-                            JOptionPane.showMessageDialog(frame, "Invalid Username or Password"); // Hatalı giriş mesajı gösterir
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
+            loginButton.addActionListener(e -> {
+                try {
+                    String username = userName.getText();
+                    String pass = new String(password.getPassword());
+                    if (username.equals("bugra") && pass.equals("5252")) {
+                        AppScreen appScreen = new AppScreen();
+                        appScreen.open();
+                        frame.dispose(); // Giriş başarılıysa ana ekranı açar ve giriş ekranını kapatır
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Invalid Username or Password"); // Hatalı giriş mesajı gösterir
                     }
+                } catch (Exception ex) {
+                    ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
                 }
             });
 
             // Kayıt butonuna tıklama işlemi
-            registerButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        String username = userName.getText();
-                        String pass = new String(password.getPassword());
-                        User newUser = new User(username, pass);
-                        newUser.saveToFile(); // Yeni kullanıcıyı dosyaya kaydeder
-                    } catch (Exception ex) {
-                        ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
-                    }
+            registerButton.addActionListener(e -> {
+                try {
+                    String username = userName.getText();
+                    String pass = new String(password.getPassword());
+                    User newUser = new User(username, pass);
+                    newUser.saveToFile(); // Yeni kullanıcıyı dosyaya kaydeder
+                } catch (Exception ex) {
+                    ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
                 }
             });
 
