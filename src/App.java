@@ -1,9 +1,10 @@
+import javax.swing.*;
 public class App {
     public static void main(String[] args) {
         try {
-            new LoginScreen();
+            new LoginScreen(); // Giriş ekranını başlatır
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Hata Mesajı: "+e);
         }
     }
 }
