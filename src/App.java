@@ -1,9 +1,9 @@
 public class App {
     public static void main(String[] args) {
         try {
-            new LoginScreen(); // Giriş ekranını başlatır
+            new LoginScreen();
         } catch (Exception e) {
-            e.printStackTrace(); // Hata durumunda hata mesajını yazdırır
+            e.printStackTrace();
         }
     }
 }

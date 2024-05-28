@@ -5,8 +5,11 @@ import java.awt.event.ActionListener;
 
 public class LoginScreen {
     private JFrame frame;
+    private UserManager userManager;
 
     public LoginScreen() {
+        userManager = new UserManager();
+
         try {
             frame = new JFrame("Padlock-Login");
             frame.setSize(300, 150);
@@ -28,37 +31,35 @@ public class LoginScreen {
             JButton loginButton = new JButton("Login");
             JButton registerButton = new JButton("Register");
 
-            // Giriş butonuna tıklama işlemi
             loginButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         String username = userName.getText();
                         String pass = new String(password.getPassword());
-                        if (username.equals("bugra") && pass.equals("5252")) {
+                        if (userManager.authenticateUser(username, pass)) {
                             AppScreen appScreen = new AppScreen();
                             appScreen.open();
-                            frame.dispose(); // Giriş başarılıysa ana ekranı açar ve giriş ekranını kapatır
+                            frame.dispose();
                         } else {
-                            JOptionPane.showMessageDialog(frame, "Invalid Username or Password"); // Hatalı giriş mesajı gösterir
+                            JOptionPane.showMessageDialog(frame, "Invalid Username or Password");
                         }
                     } catch (Exception ex) {
-                        ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
+                        ex.printStackTrace();
                     }
                 }
             });
 
-            // Kayıt butonuna tıklama işlemi
             registerButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     try {
                         String username = userName.getText();
                         String pass = new String(password.getPassword());
-                        User newUser = new User(username, pass);
-                        newUser.saveToFile(); // Yeni kullanıcıyı dosyaya kaydeder
+                        userManager.addUser(new User(username, pass));
+                        JOptionPane.showMessageDialog(frame, "User registered successfully.");
                     } catch (Exception ex) {
-                        ex.printStackTrace(); // Hata durumunda hata mesajını yazdırır
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -69,9 +70,9 @@ public class LoginScreen {
             frame.add(userLoginScreen);
             frame.add(buttonPanel);
 
-            frame.setVisible(true); // Ekranı görünür yapar
+            frame.setVisible(true);
         } catch (Exception e) {
-            e.printStackTrace(); // Hata durumunda hata mesajını yazdırır
+            e.printStackTrace();
         }
     }
 }
